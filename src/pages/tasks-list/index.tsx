@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import { useStore } from "effector-react";
 import { Layout, Row, Col, Typography, Spin, Empty } from "antd"; // ~ "shared/ui/{...}"
 
-import { TaskRow, taskModel } from "entities/index";
+import { TaskRow, taskModel } from "entities/task";
 import styles from "./styles.module.scss";
+import { ToggleTask } from "features/toggle-task";
 
 const TasksListPage = () => {
   const tasks = useStore(taskModel.$tasksList);
@@ -36,7 +37,7 @@ const TasksListPage = () => {
                 <TaskRow
                   data={task}
                   titleHref={`/${task.id}`}
-                  // TODO: ToggleTaskCheckbox
+                  before={<ToggleTask taskId={task.id} />}
                 />
               </Col>
             ))}
