@@ -10,6 +10,7 @@ export const ToggleTask = ({ taskId }: { taskId: number }) => {
     <Checkbox
       onClick={() => taskModel.toggleTask(taskId)}
       checked={task.completed}
+      style={{ marginRight: 10 }}
     />
   );
 };

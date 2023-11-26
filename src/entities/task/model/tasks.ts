@@ -66,3 +66,11 @@ export const $tasksFiltered = combine(
     );
   }
 );
+
+export const getTaskByIdFx = createEffect(
+  ({ taskId, params }: typicodeApi.tasks.GetTaskByIdParams) => {
+    return typicodeApi.tasks.getTaskById({ taskId, ...params });
+  }
+);
+
+export const $taskDetailsLoading = getTaskByIdFx.pending;
