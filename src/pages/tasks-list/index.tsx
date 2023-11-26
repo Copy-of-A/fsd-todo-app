@@ -5,9 +5,10 @@ import { Layout, Row, Col, Typography, Spin, Empty } from "antd"; // ~ "shared/u
 import { TaskRow, taskModel } from "entities/task";
 import styles from "./styles.module.scss";
 import { ToggleTask } from "features/toggle-task";
+import { TasksFilters } from "features/task-filters";
 
 const TasksListPage = () => {
-  const tasks = useStore(taskModel.$tasksList);
+  const tasks = useStore(taskModel.$tasksFiltered);
   const isLoading = useStore(taskModel.$tasksListLoading);
   const isEmpty = useStore(taskModel.$tasksListEmpty);
 
@@ -26,7 +27,9 @@ const TasksListPage = () => {
         <Row justify="center">
           <Typography.Title level={1}>Tasks List</Typography.Title>
         </Row>
-        {/* TODO: TasksFilters */}
+        <Row justify="center">
+          <TasksFilters />
+        </Row>
       </Layout>
       <Layout.Content className={styles.content}>
         <Row gutter={[0, 20]} justify="center">

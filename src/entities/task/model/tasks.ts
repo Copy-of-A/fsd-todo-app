@@ -33,12 +33,36 @@ export const $tasksListLoading = getTasksListFx.pending;
 
 // We make a hook to get involved in updates react
 // @see In the case of effector, using a hook is an extreme measure, since computed stores are more preferable
-export const useTask = (
-  taskId: number
-): import("shared/api").Task | undefined => {
+export const useTask = (taskId: number): Task | undefined => {
   return useStoreMap({
     store: $tasksList,
     keys: [taskId],
     fn: (tasks, [id]) => tasks.find((task) => task.id === id),
   });
 };
+
+export type QueryConfig = { completed?: boolean };
+
+export const setQueryConfig = createEvent<QueryConfig>();
+
+// Can be moved to a separate directory (for storing multiple models)
+export const $queryConfig = createStore<QueryConfig>({}).on(
+  setQueryConfig,
+  (_, payload) => payload
+);
+
+/**
+ * Filtered Tasks
+ * @remark Can be handled at the effects level - but then you need to connect additional logic to the store
+ * > For example, hide / show the task at the `toggleTask` event
+ */
+export const $tasksFiltered = combine(
+  $tasksList,
+  $queryConfig,
+  (tasksList, config) => {
+    return tasksList.filter(
+      (task) =>
+        config.completed === undefined || task.completed === config.completed
+    );
+  }
+);
