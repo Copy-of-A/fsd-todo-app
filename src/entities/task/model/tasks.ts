@@ -1,16 +1,25 @@
 import { createStore, combine, createEffect, createEvent } from "effector";
 import { useStoreMap } from "effector-react";
 
-import { typicodeApi } from "shared/api";
-import type { Task } from "shared/api";
+import type { Task } from "shared/api/models";
+import {
+  GetTaskByIdParams,
+  GetTasksListParams,
+  getTaskById,
+  getTasksList,
+} from "shared/api/typicode/tasks";
 
-export const getTasksListFx = createEffect(
-  (params?: typicodeApi.tasks.GetTasksListParams) => {
-    return typicodeApi.tasks.getTasksList(params);
-  }
-);
+export const getTasksListFx = createEffect((params?: GetTasksListParams) => {
+  return getTasksList(params);
+});
 
 export const toggleTask = createEvent<number>();
+
+export const getTaskByIdFx = createEffect(
+  ({ taskId, params }: GetTaskByIdParams) => {
+    return getTaskById({ taskId, ...params });
+  }
+);
 
 export const $tasks = createStore<Task[]>([])
   .on(getTasksListFx.doneData, (_, payload) => payload.data)
@@ -23,7 +32,20 @@ export const $tasks = createStore<Task[]>([])
           }
         : item
     )
-  );
+  )
+  .on(getTaskByIdFx.doneData, (state, payload) => {
+    const storedItem = state.find((item) => item.id === payload.data.id);
+    if (!storedItem) {
+      return [...state, payload.data];
+    }
+    return state.map((item) =>
+      storedItem.id === item.id
+        ? {
+            ...payload.data,
+          }
+        : item
+    );
+  });
 
 export const $tasksList = combine($tasks, (tasks) => Object.values(tasks));
 
@@ -64,12 +86,6 @@ export const $tasksFiltered = combine(
       (task) =>
         config.completed === undefined || task.completed === config.completed
     );
-  }
-);
-
-export const getTaskByIdFx = createEffect(
-  ({ taskId, params }: typicodeApi.tasks.GetTaskByIdParams) => {
-    return typicodeApi.tasks.getTaskById({ taskId, ...params });
   }
 );
 

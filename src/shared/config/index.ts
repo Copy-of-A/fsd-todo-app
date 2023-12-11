@@ -25,3 +25,5 @@ export const NODE_ENV = getEnvVar("NODE_ENV");
 export const isDevEnv = NODE_ENV === "development";
 /** Режим продакшена */
 export const isProdEnv = NODE_ENV === "production";
+/** Суб-домен */
+export const baseUrl = isDevEnv ? "/" : "/fsd-todo-app";

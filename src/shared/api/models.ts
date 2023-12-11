@@ -1,1 +1,1 @@
-export * from "./typicode/models";
+export { type Task } from "./typicode/models";
