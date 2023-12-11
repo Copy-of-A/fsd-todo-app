@@ -32,12 +32,18 @@ jobs:
         uses: actions/setup-node@v4.0.0
         with:
           node-version-file: .node-version
+
       - name: Install deps
         run: npm install
+
       - name: Build
+        env:
+          PUBLIC_URL: https://copy-of-a.github.io/fsd-todo-app
         run: npm run build
+
       - name: Workaround spa gh-pages
         run: cp build/index.html build/404.html
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
