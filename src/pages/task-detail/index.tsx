@@ -5,7 +5,7 @@ import {
   $taskDetailsLoading,
   getTaskByIdFx,
 } from "entities/task";
-import { Layout, Button } from "antd"; // ~ "shared/ui/{...}"
+import { Layout, Button, Spin } from "antd"; // ~ "shared/ui/{...}"
 import styles from "./styles.module.scss";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -41,6 +41,16 @@ const TaskDetailsPage = () => {
           <Link to="/">
             <Button>Back to TasksList</Button>
           </Link>
+        </Layout.Content>
+      </Layout>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <Layout className={styles.root}>
+        <Layout.Content className={styles.content}>
+          <Spin size="large" />
         </Layout.Content>
       </Layout>
     );
