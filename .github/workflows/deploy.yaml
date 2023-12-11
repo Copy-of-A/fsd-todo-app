@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -36,10 +36,12 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
+      - name: Workaround spa gh-pages
+        run: cp build/index.html build/404.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: 'build'
+          path: "build"
   deploy:
     environment:
       name: github-pages
