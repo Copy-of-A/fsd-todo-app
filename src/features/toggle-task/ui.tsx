@@ -1,16 +1,25 @@
 import { Checkbox } from "antd"; // ~ "shared/ui/checkbox"
-import { taskModel } from "entities/task";
+import { toggleTask, useTask, getTaskStatus } from "entities/task";
+
+export type ToggleTaskProps = {
+  taskId: number;
+  withStatus?: boolean;
+};
 
 // resolve / unresolve
-export const ToggleTask = ({ taskId }: { taskId: number }) => {
-  const task = taskModel.useTask(taskId);
+export const ToggleTask = ({ taskId, withStatus = true }: ToggleTaskProps) => {
+  const task = useTask(taskId);
   if (!task) return null;
+
+  const status = getTaskStatus(task);
 
   return (
     <Checkbox
-      onClick={() => taskModel.toggleTask(taskId)}
+      onClick={() => toggleTask(taskId)}
       checked={task.completed}
       style={{ marginRight: 10 }}
-    />
+    >
+      {withStatus && status}
+    </Checkbox>
   );
 };

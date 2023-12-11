@@ -2,15 +2,21 @@ import { useEffect } from "react";
 import { useStore } from "effector-react";
 import { Layout, Row, Col, Typography, Spin, Empty } from "antd"; // ~ "shared/ui/{...}"
 
-import { TaskRow, taskModel } from "entities/task";
+import {
+  TaskRow,
+  getTasksListFx,
+  $tasksFiltered,
+  $tasksListLoading,
+  $tasksListEmpty,
+} from "entities/task";
 import styles from "./styles.module.scss";
 import { ToggleTask } from "features/toggle-task";
 import { TasksFilters } from "features/task-filters";
 
 const TasksListPage = () => {
-  const tasks = useStore(taskModel.$tasksFiltered);
-  const isLoading = useStore(taskModel.$tasksListLoading);
-  const isEmpty = useStore(taskModel.$tasksListEmpty);
+  const tasks = useStore($tasksFiltered);
+  const isLoading = useStore($tasksListLoading);
+  const isEmpty = useStore($tasksListEmpty);
 
   /**
    * Requesting data when loading the page
@@ -18,7 +24,7 @@ const TasksListPage = () => {
    * It is better to fetch via event.pageMounted or reflect
    */
   useEffect(() => {
-    taskModel.getTasksListFx();
+    getTasksListFx();
   }, []);
 
   return (
@@ -40,7 +46,7 @@ const TasksListPage = () => {
                 <TaskRow
                   data={task}
                   titleHref={`/${task.id}`}
-                  before={<ToggleTask taskId={task.id} />}
+                  before={<ToggleTask taskId={task.id} withStatus={false} />}
                 />
               </Col>
             ))}

@@ -1,5 +1,10 @@
 import { ToggleTask } from "features/toggle-task";
-import { TaskCard, taskModel } from "entities/task";
+import {
+  TaskCard,
+  useTask,
+  $taskDetailsLoading,
+  getTaskByIdFx,
+} from "entities/task";
 import { Layout, Button } from "antd"; // ~ "shared/ui/{...}"
 import styles from "./styles.module.scss";
 import { useEffect } from "react";
@@ -10,8 +15,8 @@ import { useParams } from "react-router-dom";
 const TaskDetailsPage = () => {
   const params = useParams();
   const taskId = Number(params.taskId);
-  const task = taskModel.useTask(taskId);
-  const isLoading = useStore(taskModel.$taskDetailsLoading);
+  const task = useTask(taskId);
+  const isLoading = useStore($taskDetailsLoading);
 
   /**
    * Requesting data on the task
@@ -21,8 +26,7 @@ const TaskDetailsPage = () => {
   useEffect(() => {
     async function fetchData() {
       // You can await here
-      await taskModel.getTaskByIdFx({ taskId });
-      // ...
+      await getTaskByIdFx({ taskId });
     }
     fetchData();
   }, [taskId]); // Or [] if effect doesn't need props or state
