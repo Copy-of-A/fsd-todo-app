@@ -1,9 +1,9 @@
-import { taskModel } from "entities/task";
+import { type QueryConfig } from "entities/task";
 
 export type Filter = {
   id: number;
   title: string;
-  config: taskModel.QueryConfig;
+  config: QueryConfig;
 };
 
 // Описываем здесь датасет фильтров "Закрытые" / "Открытые" и т.п.
